@@ -5,32 +5,26 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.tablebit.mobile.MainActivity;
 import com.tablebit.mobile.R;
-import com.tablebit.mobile.data.model.LoginResponse;
-import com.tablebit.mobile.data.repository.AuthRepository;
 import com.tablebit.mobile.session.SessionManager;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.tablebit.mobile.ui.viewmodel.AuthViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
     private TextInputEditText etEmail, etPassword;
     private MaterialButton btnLogin, btnRegister;
-    private AuthRepository authRepository;
-    private SessionManager sessionManager;
+    private AuthViewModel authViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sessionManager = new SessionManager(this);
-
+        SessionManager sessionManager = new SessionManager(this);
         if (sessionManager.isLoggedIn()) {
             goToHome();
             return;
@@ -38,8 +32,9 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-        authRepository = new AuthRepository(sessionManager);
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         initViews();
+        observeViewModel();
     }
 
     private void initViews() {
@@ -54,6 +49,24 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
+    private void observeViewModel() {
+        authViewModel.getLoading().observe(this, loading -> {
+            btnLogin.setEnabled(!loading);
+            btnLogin.setText(loading ? R.string.cargando : R.string.btn_login);
+        });
+
+        authViewModel.getErrorMessage().observe(this, error -> {
+            if (error != null) Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        });
+
+        authViewModel.getLoginResult().observe(this, result -> {
+            if (result != null) {
+                Toast.makeText(this, R.string.login_exitoso, Toast.LENGTH_SHORT).show();
+                goToHome();
+            }
+        });
+    }
+
     private void attemptLogin() {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
@@ -63,34 +76,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        btnLogin.setEnabled(false);
-        btnLogin.setText(R.string.cargando);
-
-        authRepository.login(email, password).enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                btnLogin.setEnabled(true);
-                btnLogin.setText(R.string.btn_login);
-
-                if (response.isSuccessful() && response.body() != null) {
-                    authRepository.saveSession(response.body());
-                    Toast.makeText(LoginActivity.this, R.string.login_exitoso, Toast.LENGTH_SHORT).show();
-                    goToHome();
-                } else {
-                    String msg = response.code() == 422
-                            ? "Credenciales inválidas"
-                            : getString(R.string.login_failed);
-                    Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                btnLogin.setEnabled(true);
-                btnLogin.setText(R.string.btn_login);
-                Toast.makeText(LoginActivity.this, R.string.error_red, Toast.LENGTH_SHORT).show();
-            }
-        });
+        authViewModel.login(email, password);
     }
 
     private void goToHome() {

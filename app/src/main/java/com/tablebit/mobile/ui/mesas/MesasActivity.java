@@ -3,34 +3,23 @@ package com.tablebit.mobile.ui.mesas;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tablebit.mobile.R;
-import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.Mesa;
-import com.tablebit.mobile.data.repository.MesaRepository;
-import com.tablebit.mobile.session.SessionManager;
 import com.tablebit.mobile.ui.BaseActivity;
 import com.tablebit.mobile.ui.reservas.CrearReservaActivity;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.tablebit.mobile.ui.viewmodel.MesaViewModel;
 
 public class MesasActivity extends BaseActivity {
 
     private RecyclerView rvMesas;
-    private ProgressBar progressBar;
-    private TextView tvEmpty;
+    private View progressBar, tvEmpty;
     private MesaAdapter adapter;
-    private List<Mesa> mesaList = new ArrayList<>();
+    private MesaViewModel viewModel;
     private int restauranteId;
     private String restauranteNombre;
 
@@ -42,11 +31,10 @@ public class MesasActivity extends BaseActivity {
         restauranteId = getIntent().getIntExtra("restaurante_id", -1);
         restauranteNombre = getIntent().getStringExtra("restaurante_nombre");
 
-        SessionManager sessionManager = new SessionManager(this);
-        MesaRepository repository = new MesaRepository(sessionManager.getTokenManager());
-
+        viewModel = new ViewModelProvider(this).get(MesaViewModel.class);
         initViews();
-        loadMesas(repository);
+        observeViewModel();
+        viewModel.loadMesas(restauranteId);
     }
 
     private void initViews() {
@@ -55,11 +43,31 @@ public class MesasActivity extends BaseActivity {
         tvEmpty = findViewById(R.id.tvEmpty);
 
         rvMesas.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter = new MesaAdapter(mesaList, this::onReservarClick);
+        adapter = new MesaAdapter(viewModel.getMesas().getValue(), this::onReservarClick);
         rvMesas.setAdapter(adapter);
 
         setupToolbarWithBack(getString(R.string.titulo_mesas));
+    }
+
+    private void observeViewModel() {
+        viewModel.getLoading().observe(this, loading -> {
+            progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+            rvMesas.setVisibility(loading ? View.GONE : View.VISIBLE);
+        });
+
+        viewModel.getMesas().observe(this, mesas -> {
+            adapter = new MesaAdapter(mesas, this::onReservarClick);
+            rvMesas.setAdapter(adapter);
+            tvEmpty.setVisibility(mesas.isEmpty() ? View.VISIBLE : View.GONE);
+        });
+
+        viewModel.getErrorMessage().observe(this, error -> {
+            if (error != null) {
+                tvEmpty.setVisibility(View.VISIBLE);
+                if (tvEmpty instanceof android.widget.TextView)
+                    ((android.widget.TextView) tvEmpty).setText(error);
+            }
+        });
     }
 
     private void onReservarClick(Mesa mesa) {
@@ -69,37 +77,5 @@ public class MesasActivity extends BaseActivity {
         intent.putExtra("mesa_id", mesa.getId());
         intent.putExtra("mesa_numero", mesa.getNumeroMesa());
         startActivity(intent);
-    }
-
-    private void loadMesas(MesaRepository repository) {
-        showLoading(true);
-
-        repository.getMesasByRestaurante(restauranteId).enqueue(new Callback<ApiResponse<List<Mesa>>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<List<Mesa>>> call, Response<ApiResponse<List<Mesa>>> response) {
-                showLoading(false);
-
-                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                    mesaList.clear();
-                    mesaList.addAll(response.body().getData());
-                    adapter.notifyDataSetChanged();
-                    tvEmpty.setVisibility(mesaList.isEmpty() ? View.VISIBLE : View.GONE);
-                } else {
-                    tvEmpty.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<List<Mesa>>> call, Throwable t) {
-                showLoading(false);
-                tvEmpty.setText(R.string.error_red);
-                tvEmpty.setVisibility(View.VISIBLE);
-            }
-        });
-    }
-
-    private void showLoading(boolean show) {
-        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-        rvMesas.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 }

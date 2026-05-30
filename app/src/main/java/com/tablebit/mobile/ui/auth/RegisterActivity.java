@@ -5,34 +5,28 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.tablebit.mobile.MainActivity;
 import com.tablebit.mobile.R;
-import com.tablebit.mobile.data.model.LoginResponse;
-import com.tablebit.mobile.data.repository.AuthRepository;
-import com.tablebit.mobile.session.SessionManager;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.tablebit.mobile.ui.viewmodel.AuthViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private TextInputEditText etName, etEmail, etPassword;
     private MaterialButton btnRegister, btnLogin;
-    private AuthRepository authRepository;
-    private SessionManager sessionManager;
+    private AuthViewModel authViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        sessionManager = new SessionManager(this);
-        authRepository = new AuthRepository(sessionManager);
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         initViews();
+        observeViewModel();
     }
 
     private void initViews() {
@@ -44,6 +38,24 @@ public class RegisterActivity extends AppCompatActivity {
 
         btnRegister.setOnClickListener(v -> attemptRegister());
         btnLogin.setOnClickListener(v -> finish());
+    }
+
+    private void observeViewModel() {
+        authViewModel.getLoading().observe(this, loading -> {
+            btnRegister.setEnabled(!loading);
+            btnRegister.setText(loading ? R.string.cargando : R.string.btn_register);
+        });
+
+        authViewModel.getErrorMessage().observe(this, error -> {
+            if (error != null) Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        });
+
+        authViewModel.getLoginResult().observe(this, result -> {
+            if (result != null) {
+                Toast.makeText(this, R.string.register_exitoso, Toast.LENGTH_SHORT).show();
+                goToHome();
+            }
+        });
     }
 
     private void attemptRegister() {
@@ -61,31 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        btnRegister.setEnabled(false);
-        btnRegister.setText(R.string.cargando);
-
-        authRepository.register(name, email, password).enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                btnRegister.setEnabled(true);
-                btnRegister.setText(R.string.btn_register);
-
-                if (response.isSuccessful() && response.body() != null) {
-                    authRepository.saveSession(response.body());
-                    Toast.makeText(RegisterActivity.this, R.string.register_exitoso, Toast.LENGTH_SHORT).show();
-                    goToHome();
-                } else {
-                    Toast.makeText(RegisterActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                btnRegister.setEnabled(true);
-                btnRegister.setText(R.string.btn_register);
-                Toast.makeText(RegisterActivity.this, R.string.error_red, Toast.LENGTH_SHORT).show();
-            }
-        });
+        authViewModel.register(name, email, password);
     }
 
     private void goToHome() {

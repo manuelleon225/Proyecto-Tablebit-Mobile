@@ -12,6 +12,7 @@ okhttp = "4.12.0"
 gson = "2.10.1"
 recyclerview = "1.3.2"
 cardview = "1.0.0"
+lifecycle = "2.6.2"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -28,6 +29,8 @@ logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercep
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycle" }
+lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata", version.ref = "lifecycle" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

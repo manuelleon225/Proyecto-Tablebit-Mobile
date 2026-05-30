@@ -5,27 +5,22 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.tablebit.mobile.R;
-import com.tablebit.mobile.data.model.ApiResponse;
-import com.tablebit.mobile.data.model.Reserva;
-import com.tablebit.mobile.data.repository.ReservaRepository;
-import com.tablebit.mobile.session.SessionManager;
 import com.tablebit.mobile.ui.BaseActivity;
+import com.tablebit.mobile.ui.viewmodel.ReservaViewModel;
 
 import java.util.Calendar;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CrearReservaActivity extends BaseActivity {
 
     private TextInputEditText etFecha, etHora, etPersonas;
     private MaterialButton btnConfirmar;
     private int restauranteId, mesaId;
-    private ReservaRepository repository;
+    private ReservaViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +30,9 @@ public class CrearReservaActivity extends BaseActivity {
         restauranteId = getIntent().getIntExtra("restaurante_id", -1);
         mesaId = getIntent().getIntExtra("mesa_id", -1);
 
-        SessionManager sessionManager = new SessionManager(this);
-        repository = new ReservaRepository(sessionManager.getTokenManager());
-
+        viewModel = new ViewModelProvider(this).get(ReservaViewModel.class);
         initViews();
+        observeViewModel();
     }
 
     private void initViews() {
@@ -56,6 +50,24 @@ public class CrearReservaActivity extends BaseActivity {
         etHora.setKeyListener(null);
 
         btnConfirmar.setOnClickListener(v -> crearReserva());
+    }
+
+    private void observeViewModel() {
+        viewModel.getLoading().observe(this, loading -> {
+            btnConfirmar.setEnabled(!loading);
+            btnConfirmar.setText(loading ? R.string.cargando : R.string.btn_confirmar_reserva);
+        });
+
+        viewModel.getErrorMessage().observe(this, error -> {
+            if (error != null) Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        });
+
+        viewModel.getReservaCreada().observe(this, reserva -> {
+            if (reserva != null) {
+                Toast.makeText(this, R.string.reserva_creada, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     private void showDatePicker() {
@@ -92,31 +104,6 @@ public class CrearReservaActivity extends BaseActivity {
         }
 
         int personas = Integer.parseInt(personasStr);
-
-        btnConfirmar.setEnabled(false);
-        btnConfirmar.setText(R.string.cargando);
-
-        repository.crearReserva(restauranteId, mesaId, fecha, hora, personas)
-                .enqueue(new Callback<ApiResponse<Reserva>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<Reserva>> call, Response<ApiResponse<Reserva>> response) {
-                        btnConfirmar.setEnabled(true);
-                        btnConfirmar.setText(R.string.btn_confirmar_reserva);
-
-                        if (response.isSuccessful() && response.body() != null) {
-                            Toast.makeText(CrearReservaActivity.this, R.string.reserva_creada, Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(CrearReservaActivity.this, R.string.error_general, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse<Reserva>> call, Throwable t) {
-                        btnConfirmar.setEnabled(true);
-                        btnConfirmar.setText(R.string.btn_confirmar_reserva);
-                        Toast.makeText(CrearReservaActivity.this, R.string.error_red, Toast.LENGTH_SHORT).show();
-                    }
-                });
+        viewModel.crearReserva(restauranteId, mesaId, fecha, hora, personas);
     }
 }
