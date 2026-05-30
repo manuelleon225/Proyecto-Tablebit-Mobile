@@ -7,7 +7,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +14,8 @@ import com.tablebit.mobile.R;
 import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.Reserva;
 import com.tablebit.mobile.data.repository.ReservaRepository;
-import com.tablebit.mobile.session.TokenManager;
+import com.tablebit.mobile.session.SessionManager;
+import com.tablebit.mobile.ui.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReservasActivity extends AppCompatActivity {
+public class ReservasActivity extends BaseActivity {
 
     private RecyclerView rvReservas;
     private ProgressBar progressBar;
@@ -38,8 +38,8 @@ public class ReservasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservas);
 
-        TokenManager tokenManager = new TokenManager(this);
-        repository = new ReservaRepository(tokenManager);
+        SessionManager sessionManager = new SessionManager(this);
+        repository = new ReservaRepository(sessionManager.getTokenManager());
 
         initViews();
         loadReservas();
@@ -55,7 +55,7 @@ public class ReservasActivity extends AppCompatActivity {
         adapter = new ReservaAdapter(reservaList, this::onCancelarClick);
         rvReservas.setAdapter(adapter);
 
-        findViewById(R.id.toolbar).setOnClickListener(v -> finish());
+        setupToolbarWithBack(getString(R.string.titulo_reservas));
     }
 
     private void onCancelarClick(Reserva reserva) {

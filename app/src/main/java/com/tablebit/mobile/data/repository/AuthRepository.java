@@ -5,18 +5,18 @@ import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.LoginRequest;
 import com.tablebit.mobile.data.model.LoginResponse;
 import com.tablebit.mobile.data.model.RegisterRequest;
-import com.tablebit.mobile.session.TokenManager;
+import com.tablebit.mobile.session.SessionManager;
 
 import retrofit2.Call;
 
 public class AuthRepository {
 
     private final RetrofitClient client;
-    private final TokenManager tokenManager;
+    private final SessionManager sessionManager;
 
-    public AuthRepository(TokenManager tokenManager) {
-        this.tokenManager = tokenManager;
-        this.client = RetrofitClient.getInstance(tokenManager);
+    public AuthRepository(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+        this.client = RetrofitClient.getInstance(sessionManager);
     }
 
     public Call<LoginResponse> login(String email, String password) {
@@ -32,9 +32,9 @@ public class AuthRepository {
     }
 
     public void saveSession(LoginResponse response) {
-        tokenManager.saveToken(response.getToken());
+        sessionManager.saveToken(response.getToken());
         if (response.getUser() != null) {
-            tokenManager.saveUserInfo(
+            sessionManager.saveUserInfo(
                     response.getUser().getId(),
                     response.getUser().getName(),
                     response.getUser().getEmail()
@@ -43,7 +43,6 @@ public class AuthRepository {
     }
 
     public void clearSession() {
-        tokenManager.clearSession();
-        RetrofitClient.resetInstance();
+        sessionManager.forceLogout(null);
     }
 }

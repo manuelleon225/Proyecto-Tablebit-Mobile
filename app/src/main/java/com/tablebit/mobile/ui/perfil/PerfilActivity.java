@@ -1,28 +1,25 @@
 package com.tablebit.mobile.ui.perfil;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.tablebit.mobile.MainActivity;
 import com.tablebit.mobile.R;
 import com.tablebit.mobile.data.api.RetrofitClient;
 import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.Usuario;
-import com.tablebit.mobile.session.TokenManager;
-import com.tablebit.mobile.ui.auth.LoginActivity;
+import com.tablebit.mobile.session.SessionManager;
+import com.tablebit.mobile.ui.BaseActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PerfilActivity extends AppCompatActivity {
+public class PerfilActivity extends BaseActivity {
 
-    private TokenManager tokenManager;
+    private SessionManager sessionManager;
     private TextView tvName, tvEmail;
 
     @Override
@@ -30,8 +27,7 @@ public class PerfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
-        tokenManager = new TokenManager(this);
-
+        sessionManager = new SessionManager(this);
         initViews();
         loadPerfil();
     }
@@ -40,19 +36,30 @@ public class PerfilActivity extends AppCompatActivity {
         tvName = findViewById(R.id.tvName);
         tvEmail = findViewById(R.id.tvEmail);
 
-        String name = tokenManager.getUserName();
-        String email = tokenManager.getUserEmail();
+        String name = sessionManager.getUserName();
+        String email = sessionManager.getUserEmail();
         if (name != null) tvName.setText(name);
         if (email != null) tvEmail.setText(email);
 
-        findViewById(R.id.toolbar).setOnClickListener(v -> finish());
+        setupToolbarWithBack(getString(R.string.titulo_perfil));
 
         CardView cardLogout = findViewById(R.id.cardLogout);
-        cardLogout.setOnClickListener(v -> performLogout());
+        cardLogout.setOnClickListener(v -> confirmLogout());
+    }
+
+    private void confirmLogout() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(getString(R.string.menu_cerrar_sesion))
+                .setMessage(getString(R.string.confirmar_cerrar_sesion))
+                .setPositiveButton("Sí", (dialog, which) ->
+                        sessionManager.performLogout(PerfilActivity.this))
+                .setNegativeButton("No", null)
+                .show();
     }
 
     private void loadPerfil() {
-        Call<ApiResponse<Usuario>> call = RetrofitClient.getInstance(tokenManager).getApiService().getPerfil();
+        Call<ApiResponse<Usuario>> call = RetrofitClient
+                .getInstance(sessionManager.getTokenManager()).getApiService().getPerfil();
         call.enqueue(new Callback<ApiResponse<Usuario>>() {
             @Override
             public void onResponse(Call<ApiResponse<Usuario>> call, Response<ApiResponse<Usuario>> response) {
@@ -60,8 +67,7 @@ public class PerfilActivity extends AppCompatActivity {
                     Usuario user = response.body().getData();
                     tvName.setText(user.getName());
                     tvEmail.setText(user.getEmail());
-
-                    tokenManager.saveUserInfo(user.getId(), user.getName(), user.getEmail());
+                    sessionManager.saveUserInfo(user.getId(), user.getName(), user.getEmail());
                 }
             }
 
@@ -70,31 +76,5 @@ public class PerfilActivity extends AppCompatActivity {
                 Toast.makeText(PerfilActivity.this, R.string.error_red, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void performLogout() {
-        Call<ApiResponse<Void>> call = RetrofitClient.getInstance(tokenManager).getApiService().logout();
-        call.enqueue(new Callback<ApiResponse<Void>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
-                tokenManager.clearSession();
-                RetrofitClient.resetInstance();
-                goToLogin();
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
-                tokenManager.clearSession();
-                RetrofitClient.resetInstance();
-                goToLogin();
-            }
-        });
-    }
-
-    private void goToLogin() {
-        Intent intent = new Intent(PerfilActivity.this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
     }
 }

@@ -12,7 +12,7 @@ import com.tablebit.mobile.MainActivity;
 import com.tablebit.mobile.R;
 import com.tablebit.mobile.data.model.LoginResponse;
 import com.tablebit.mobile.data.repository.AuthRepository;
-import com.tablebit.mobile.session.TokenManager;
+import com.tablebit.mobile.session.SessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,22 +23,22 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText etEmail, etPassword;
     private MaterialButton btnLogin, btnRegister;
     private AuthRepository authRepository;
-    private TokenManager tokenManager;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        tokenManager = new TokenManager(this);
+        sessionManager = new SessionManager(this);
 
-        if (tokenManager.isLoggedIn()) {
+        if (sessionManager.isLoggedIn()) {
             goToHome();
             return;
         }
 
         setContentView(R.layout.activity_login);
 
-        authRepository = new AuthRepository(tokenManager);
+        authRepository = new AuthRepository(sessionManager);
         initViews();
     }
 
@@ -77,7 +77,10 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, R.string.login_exitoso, Toast.LENGTH_SHORT).show();
                     goToHome();
                 } else {
-                    Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+                    String msg = response.code() == 422
+                            ? "Credenciales inválidas"
+                            : getString(R.string.login_failed);
+                    Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -12,7 +12,7 @@ import com.tablebit.mobile.MainActivity;
 import com.tablebit.mobile.R;
 import com.tablebit.mobile.data.model.LoginResponse;
 import com.tablebit.mobile.data.repository.AuthRepository;
-import com.tablebit.mobile.session.TokenManager;
+import com.tablebit.mobile.session.SessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,15 +23,15 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText etName, etEmail, etPassword;
     private MaterialButton btnRegister, btnLogin;
     private AuthRepository authRepository;
-    private TokenManager tokenManager;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        tokenManager = new TokenManager(this);
-        authRepository = new AuthRepository(tokenManager);
+        sessionManager = new SessionManager(this);
+        authRepository = new AuthRepository(sessionManager);
         initViews();
     }
 

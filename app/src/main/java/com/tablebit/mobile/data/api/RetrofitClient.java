@@ -1,5 +1,6 @@
 package com.tablebit.mobile.data.api;
 
+import com.tablebit.mobile.session.SessionManager;
 import com.tablebit.mobile.session.TokenManager;
 
 import java.util.concurrent.TimeUnit;
@@ -41,6 +42,10 @@ public class RetrofitClient {
             instance = new RetrofitClient(tokenManager);
         }
         return instance;
+    }
+
+    public static synchronized RetrofitClient getInstance(SessionManager sessionManager) {
+        return getInstance(sessionManager.getTokenManager());
     }
 
     public static void resetInstance() {

@@ -7,9 +7,13 @@
     <string name="error_red">Error de conexión. Verifica tu conexión a internet.</string>
     <string name="error_server">Error del servidor. Intenta de nuevo más tarde.</string>
     <string name="error_general">Ocurrió un error inesperado.</string>
+    <string name="error_sesion_expirada">Sesión expirada. Inicia sesión nuevamente.</string>
     <string name="sin_datos">No hay datos disponibles.</string>
     <string name="btn_volver">Volver</string>
     <string name="btn_intentar">Reintentar</string>
+
+    <!-- Splash -->
+    <string name="splash_subtitulo">Reserva de mesas para restaurantes</string>
 
     <!-- Auth -->
     <string name="titulo_login">Iniciar Sesión</string>

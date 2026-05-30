@@ -10,7 +10,7 @@ import okhttp3.Response;
 
 public class AuthInterceptor implements Interceptor {
 
-    private TokenManager tokenManager;
+    private final TokenManager tokenManager;
 
     public AuthInterceptor(TokenManager tokenManager) {
         this.tokenManager = tokenManager;
@@ -21,15 +21,20 @@ public class AuthInterceptor implements Interceptor {
         String token = tokenManager.getToken();
         Request original = chain.request();
 
-        if (token != null && !token.isEmpty()) {
-            Request.Builder builder = original.newBuilder()
-                    .header("Authorization", "Bearer " + token)
-                    .header("Accept", "application/json");
+        Request.Builder builder = original.newBuilder()
+                .header("Accept", "application/json");
 
-            Request request = builder.build();
-            return chain.proceed(request);
+        if (token != null && !token.isEmpty()) {
+            builder.header("Authorization", "Bearer " + token);
         }
 
-        return chain.proceed(original);
+        Request request = builder.build();
+        Response response = chain.proceed(request);
+
+        if (response.code() == 401) {
+            tokenManager.clearSession();
+        }
+
+        return response;
     }
 }

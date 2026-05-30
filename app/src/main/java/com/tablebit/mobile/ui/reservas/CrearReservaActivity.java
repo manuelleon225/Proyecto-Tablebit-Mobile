@@ -5,15 +5,14 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.tablebit.mobile.R;
 import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.Reserva;
 import com.tablebit.mobile.data.repository.ReservaRepository;
-import com.tablebit.mobile.session.TokenManager;
+import com.tablebit.mobile.session.SessionManager;
+import com.tablebit.mobile.ui.BaseActivity;
 
 import java.util.Calendar;
 
@@ -21,13 +20,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CrearReservaActivity extends AppCompatActivity {
+public class CrearReservaActivity extends BaseActivity {
 
     private TextInputEditText etFecha, etHora, etPersonas;
     private MaterialButton btnConfirmar;
     private int restauranteId, mesaId;
-    private String restauranteNombre;
-    private int mesaNumero;
     private ReservaRepository repository;
 
     @Override
@@ -37,11 +34,9 @@ public class CrearReservaActivity extends AppCompatActivity {
 
         restauranteId = getIntent().getIntExtra("restaurante_id", -1);
         mesaId = getIntent().getIntExtra("mesa_id", -1);
-        restauranteNombre = getIntent().getStringExtra("restaurante_nombre");
-        mesaNumero = getIntent().getIntExtra("mesa_numero", -1);
 
-        TokenManager tokenManager = new TokenManager(this);
-        repository = new ReservaRepository(tokenManager);
+        SessionManager sessionManager = new SessionManager(this);
+        repository = new ReservaRepository(sessionManager.getTokenManager());
 
         initViews();
     }
@@ -52,7 +47,7 @@ public class CrearReservaActivity extends AppCompatActivity {
         etPersonas = findViewById(R.id.etPersonas);
         btnConfirmar = findViewById(R.id.btnConfirmarReserva);
 
-        findViewById(R.id.toolbar).setOnClickListener(v -> finish());
+        setupToolbarWithBack(getString(R.string.titulo_crear_reserva));
 
         etFecha.setOnClickListener(v -> showDatePicker());
         etFecha.setKeyListener(null);

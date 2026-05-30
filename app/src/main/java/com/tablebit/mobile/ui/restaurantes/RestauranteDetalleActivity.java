@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.button.MaterialButton;
 import com.tablebit.mobile.R;
+import com.tablebit.mobile.ui.BaseActivity;
 import com.tablebit.mobile.ui.mesas.MesasActivity;
 
-public class RestauranteDetalleActivity extends AppCompatActivity {
+public class RestauranteDetalleActivity extends BaseActivity {
 
     private int restauranteId;
 
@@ -29,6 +28,8 @@ public class RestauranteDetalleActivity extends AppCompatActivity {
     }
 
     private void initViews(String nombre, String direccion, String telefono, String descripcion) {
+        setupToolbarWithBack(getString(R.string.detalle_restaurante));
+
         TextView tvNombre = findViewById(R.id.tvNombre);
         TextView tvDireccion = findViewById(R.id.tvDireccion);
         TextView tvTelefono = findViewById(R.id.tvTelefono);
@@ -39,8 +40,6 @@ public class RestauranteDetalleActivity extends AppCompatActivity {
         tvDireccion.setText(direccion);
         tvTelefono.setText(telefono);
         tvDescripcion.setText(descripcion != null ? descripcion : "");
-
-        findViewById(R.id.toolbar).setOnClickListener(v -> finish());
 
         btnVerMesas.setOnClickListener(v -> {
             Intent intent = new Intent(this, MesasActivity.class);

@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +13,8 @@ import com.tablebit.mobile.R;
 import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.Mesa;
 import com.tablebit.mobile.data.repository.MesaRepository;
-import com.tablebit.mobile.session.TokenManager;
+import com.tablebit.mobile.session.SessionManager;
+import com.tablebit.mobile.ui.BaseActivity;
 import com.tablebit.mobile.ui.reservas.CrearReservaActivity;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MesasActivity extends AppCompatActivity {
+public class MesasActivity extends BaseActivity {
 
     private RecyclerView rvMesas;
     private ProgressBar progressBar;
@@ -42,8 +42,8 @@ public class MesasActivity extends AppCompatActivity {
         restauranteId = getIntent().getIntExtra("restaurante_id", -1);
         restauranteNombre = getIntent().getStringExtra("restaurante_nombre");
 
-        TokenManager tokenManager = new TokenManager(this);
-        MesaRepository repository = new MesaRepository(tokenManager);
+        SessionManager sessionManager = new SessionManager(this);
+        MesaRepository repository = new MesaRepository(sessionManager.getTokenManager());
 
         initViews();
         loadMesas(repository);
@@ -59,7 +59,7 @@ public class MesasActivity extends AppCompatActivity {
         adapter = new MesaAdapter(mesaList, this::onReservarClick);
         rvMesas.setAdapter(adapter);
 
-        findViewById(R.id.toolbar).setOnClickListener(v -> finish());
+        setupToolbarWithBack(getString(R.string.titulo_mesas));
     }
 
     private void onReservarClick(Mesa mesa) {

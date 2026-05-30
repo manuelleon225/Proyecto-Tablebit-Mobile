@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +13,8 @@ import com.tablebit.mobile.R;
 import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.Restaurante;
 import com.tablebit.mobile.data.repository.RestauranteRepository;
-import com.tablebit.mobile.session.TokenManager;
+import com.tablebit.mobile.session.SessionManager;
+import com.tablebit.mobile.ui.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RestauranteListActivity extends AppCompatActivity {
+public class RestauranteListActivity extends BaseActivity {
 
     private RecyclerView rvRestaurantes;
     private ProgressBar progressBar;
@@ -37,8 +37,8 @@ public class RestauranteListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurante_list);
 
-        TokenManager tokenManager = new TokenManager(this);
-        repository = new RestauranteRepository(tokenManager);
+        SessionManager sessionManager = new SessionManager(this);
+        repository = new RestauranteRepository(sessionManager.getTokenManager());
 
         initViews();
         loadRestaurantes();
@@ -54,7 +54,7 @@ public class RestauranteListActivity extends AppCompatActivity {
         adapter = new RestauranteAdapter(restauranteList, this::onRestauranteClick);
         rvRestaurantes.setAdapter(adapter);
 
-        findViewById(R.id.toolbar).setOnClickListener(v -> finish());
+        setupToolbarWithBack(getString(R.string.titulo_restaurantes));
     }
 
     private void onRestauranteClick(Restaurante restaurante) {
