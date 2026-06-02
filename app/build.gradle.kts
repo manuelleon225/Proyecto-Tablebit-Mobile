@@ -54,7 +54,19 @@ dependencies {
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.lifecycle.livedata)
 
+    // Glide
+    implementation(libs.glide)
+
+    // SwipeRefreshLayout
+    implementation(libs.swiperefreshlayout)
+
+    // SDP - responsive sizing
+    implementation(libs.sdp.android)
+    implementation(libs.ssp.android)
+
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.android)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
 }

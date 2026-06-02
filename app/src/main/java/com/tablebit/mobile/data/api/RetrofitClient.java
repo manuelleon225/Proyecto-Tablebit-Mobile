@@ -16,9 +16,16 @@ public class RetrofitClient {
     private final Retrofit retrofit;
     private final ApiService apiService;
 
+    private static final boolean IS_DEBUG = false; // Cambiar a true solo en desarrollo local
+
     private RetrofitClient(TokenManager tokenManager) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        if (IS_DEBUG) {
+            logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        } else {
+            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        }
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new AuthInterceptor(tokenManager))
@@ -29,7 +36,7 @@ public class RetrofitClient {
                 .build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/")
+                .baseUrl(NetworkConfig.BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

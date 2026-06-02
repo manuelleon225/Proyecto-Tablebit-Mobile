@@ -1,7 +1,29 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.TableBitMobile" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#FF4C8C4A</item>
+        <item name="colorOnPrimary">#FF0A2E0D</item>
+        <item name="colorPrimaryContainer">#FF1B5E20</item>
+        <item name="colorOnPrimaryContainer">#FFE8F5E9</item>
+        <item name="colorSecondary">#FFE8D48B</item>
+        <item name="colorOnSecondary">#FF1F2937</item>
+        <item name="colorSecondaryContainer">#FFD4AF37</item>
+        <item name="colorTertiary">#FFF5E6D3</item>
+        <item name="colorTertiaryContainer">#FF8D6E4E</item>
+        <item name="android:colorBackground">#FF121212</item>
+        <item name="colorSurface">#FF1E1E1E</item>
+        <item name="colorSurfaceVariant">#FF2D2D2D</item>
+        <item name="colorError">#FFEF5350</item>
+        <item name="colorErrorContainer">#FFD32F2F</item>
+        <item name="colorOnError">#FFFFFFFF</item>
+        <item name="colorOutline">#FF424242</item>
+        <item name="android:statusBarColor">#FF000000</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+        <item name="textAppearanceHeadlineLarge">@style/TableBitText.HeadlineLarge</item>
+        <item name="textAppearanceBodyLarge">@style/TableBitText.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TableBitText.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TableBitText.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TableBitText.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TableBitText.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TableBitText.LabelSmall</item>
     </style>
 </resources>

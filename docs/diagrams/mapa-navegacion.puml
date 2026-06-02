@@ -1,0 +1,85 @@
+@startuml
+!theme plain
+skinparam defaultFontName Arial
+skinparam activityStyle arrowColor #333333
+left to right direction
+
+title "Mapa de Navegación - TableBit Mobile"
+
+state "SplashActivity" as splash : Pantalla de carga\n2 segundos
+state "OnboardingActivity" as onboarding : Tutorial\n3 páginas
+state "LoginActivity" as login : Inicio de sesión
+state "RegisterActivity" as register : Registro
+state "MainActivity" as main : Router\n(redirecciona según rol)
+
+state "HomeClienteActivity" as homeCliente : Home Cliente\n(BottomNavigation: Home, Reservas,\nFavoritos, Perfil)
+state "DetalleRestauranteClienteActivity" as detalleCliente : Detalle restaurante\ncliente
+state "ProcesoReservaActivity" as procesoReserva : Proceso de reserva\n(paso a paso)
+state "CrearReservaActivity" as crearReserva : Crear reserva
+state "MisReservasActivity" as misReservas : Mis reservas\n(Tab: Próximas | Pasadas)
+state "FavoritosActivity" as favoritos : Restaurantes\nfavoritos
+state "PerfilActivity" as perfil : Mi perfil
+state "CrearResenaActivity" as crearResena : Crear reseña
+state "GaleriaFullscreenActivity" as galeriaFull : Galería\npantalla completa
+
+state "AdminDashboardActivity" as adminDashboard : Dashboard Admin\n(BottomNavigation)
+state "GestionMesasActivity" as gestionMesas : Gestión de mesas
+state "ListadoReservasActivity" as listadoReservas : Listado de\nreservas admin
+state "CalendarioReservasActivity" as calendario : Calendario de\nreservas
+state "HorariosRestauranteActivity" as horarios : Horarios del\nrestaurante
+state "DetalleReservaAdminActivity" as detalleAdmin : Detalle reserva\nadmin
+state "GaleriaAdminActivity" as galeriaAdmin : Galería admin
+
+state "RestauranteListActivity" as restList : Lista de\nrestaurantes
+state "RestauranteDetalleActivity" as restDetalle : Detalle\nrestaurante
+state "MisRestaurantesActivity" as misRest : Mis restaurantes\n(admin)
+state "MesasActivity" as mesasView : Vista de mesas
+state "ReservasActivity" as reservasView : Reservas\n(genérico)
+
+splash --> onboarding : No logueado
+splash --> main : Ya logueado
+
+onboarding --> login : Skip / Comenzar
+
+login --> main : Login exitoso
+login --> register : Ir a registro
+register --> main : Registro exitoso
+
+main --> homeCliente : Rol: cliente
+main --> adminDashboard : Rol: admin_restaurante
+
+' === FLUJO CLIENTE ===
+homeCliente --> detalleCliente : Seleccionar restaurante
+detalleCliente --> crearReserva : Reservar
+detalleCliente --> crearResena : Escribir reseña
+detalleCliente --> galeriaFull : Ver galería
+
+homeCliente --> misReservas : Mis reservas
+homeCliente --> favoritos : Favoritos
+homeCliente --> perfil : Perfil
+
+misReservas --> ReservasProximasFragment
+misReservas --> ReservasPasadasFragment
+
+perfil --> login : Cerrar sesión
+
+' === FLUJO ADMIN ===
+adminDashboard --> gestionMesas : Gestionar mesas
+adminDashboard --> listadoReservas : Ver reservas
+adminDashboard --> calendario : Ver calendario
+adminDashboard --> horarios : Configurar horarios
+adminDashboard --> galeriaAdmin : Administrar galería
+adminDashboard --> detalleAdmin : Ver detalle reserva
+
+gestionMesas --> MesaEstadoBottomSheet : Cambiar estado
+listadoReservas --> detalleAdmin : Ver detalle
+
+adminDashboard --> login : Cerrar sesión
+
+' === FLUJO GENÉRICO ===
+restList --> restDetalle : Seleccionar
+misRest --> restDetalle : Seleccionar
+restDetalle --> mesasView : Ver mesas
+restDetalle --> reservasView : Ver reservas
+
+@enduml

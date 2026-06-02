@@ -10,17 +10,14 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary"
-        android:theme="@style/ThemeOverlay.Material3.ActionBar"
-        app:title="@string/titulo_reservas"
-        app:titleTextColor="@color/white"
+        style="@style/TableBit.Toolbar"
         app:navigationIcon="@android:drawable/ic_menu_revert" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvReservas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:padding="@dimen/spacing_lg"
         android:clipToPadding="false" />
 
     <ProgressBar
@@ -42,3 +39,5 @@
         android:visibility="gone" />
 
 </LinearLayout>
+
+

@@ -1,0 +1,449 @@
+@startuml
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam defaultFontName Arial
+
+package "com.tablebit.mobile.data.model" as model {
+  class ApiResponse<T> {
+    - boolean success
+    - String message
+    - T data
+    + isSuccess(): boolean
+    + getMessage(): String
+    + getData(): T
+  }
+
+  class LoginRequest {
+    - String email
+    - String password
+    + LoginRequest(email, password)
+  }
+
+  class RegisterRequest {
+    - String name
+    - String email
+    - String password
+    - String password_confirmation
+    + RegisterRequest(name, email, password)
+  }
+
+  class LoginResponse {
+    - Usuario user
+    - String token
+    + getUser(): Usuario
+    + getToken(): String
+  }
+
+  class Usuario {
+    - int id
+    - String name
+    - String email
+    - String avatar
+    - String role
+    - String estado
+    - String telefono
+    + getId(): int
+    + getName(): String
+    + getEmail(): String
+    + getAvatar(): String
+    + getRole(): String
+    + getEstado(): String
+    + getTelefono(): String
+  }
+
+  class Restaurante {
+    - int id
+    - String nombre
+    - String slug
+    - String direccion
+    - String ciudad
+    - String telefono
+    - String descripcion
+    - String imagen
+    - String tipoComida
+    - int capacidadTotal
+    - String horarioApertura
+    - String horarioCierre
+    - Double resenasAvgRating
+    - int resenasCount
+    - Boolean abiertoAhora
+    - String logo
+    - String banner
+    - String estado
+  }
+
+  class Mesa {
+    - int id
+    - int restauranteId
+    - int numero
+    - int capacidad
+    - String estado
+  }
+
+  class MesaEstadoRequest {
+    - String estado
+    + MesaEstadoRequest(estado)
+  }
+
+  class Reserva {
+    - int id
+    - int clienteId
+    - int restauranteId
+    - int mesaId
+    - String fecha
+    - String hora
+    - int cantidadPersonas
+    - String estado
+    - String notas
+    - Restaurante restaurante
+    - Mesa mesa
+    - Usuario cliente
+  }
+
+  class ReservaRequest {
+    - int restauranteId
+    - String fecha
+    - String hora
+    - int cantidadPersonas
+    - String notas
+    + ReservaRequest(restauranteId, fecha, hora, cantidadPersonas)
+  }
+
+  class ReservasResponse {
+    - int current_page
+    - List<Reserva> data
+    - int last_page
+    - int total
+    + getData(): List<Reserva>
+    + getTotal(): int
+  }
+
+  class DashboardData {
+    - int reservasHoy
+    - int confirmadas
+    - int canceladas
+    - double ocupacionHoy
+    - int mesasTotales
+    - int mesasOcupadasHoy
+    - int mesasLibresHoy
+    - double personasPromedio
+    - List<HoraPico> horasPico
+    - List<ReservaSemana> reservasPorSemana
+    + getCapacidadFisica(): String
+    + getEstadoDescripcion(): String
+    + getOcupacionDetalle(): String
+  }
+
+  class HoraPico {
+    - int hora
+    - int total
+  }
+
+  class ReservaSemana {
+    - int semana
+    - int total
+  }
+
+  class CalendarioResponse {
+    - String restauranteId
+    - String fechaInicio
+    - String fechaFin
+    - List<Evento> eventos
+  }
+
+  class Evento {
+    - int id
+    - String title
+    - String start
+    - String end
+    - String backgroundColor
+    - String borderColor
+    + getFecha(): String
+  }
+}
+
+package "com.tablebit.mobile.data.api" as api {
+  interface ApiService {
+    + login(LoginRequest): Call<LoginResponse>
+    + register(RegisterRequest): Call<LoginResponse>
+    + logout(): Call<Map>
+    + getRestaurantes(): Call<List<Restaurante>>
+    + buscarRestaurantes(q): Call<List<Restaurante>>
+    + getMisRestaurantes(): Call<List<Restaurante>>
+    + getRestaurante(id): Call<Map>
+    + getMesasByRestaurante(restauranteId): Call<List<Mesa>>
+    + updateMesa(id, MesaEstadoRequest): Call<Map>
+    + createMesa(body): Call<Map>
+    + deleteMesa(id): Call<Map>
+    + getReservaDetail(id): Call<Map>
+    + cambiarEstadoReserva(id, body): Call<Map>
+    + crearReserva(ReservaRequest): Call<Map>
+    + getMisReservas(): Call<List<Reserva>>
+    + cancelarReserva(reservaId): Call<Map>
+    + getPerfil(): Call<Usuario>
+    + updatePerfil(body): Call<Usuario>
+    + uploadAvatar(MultipartBody.Part): Call<Map>
+    + toggleFavorito(restauranteId): Call<Map>
+    + getFavoritos(): Call<List<Map>>
+    + verificarFavorito(restauranteId): Call<Map>
+    + getDashboard(restauranteId): Call<DashboardData>
+    + getCalendario(restauranteId, inicio, fin): Call<CalendarioResponse>
+    + getReservasAdmin(restauranteId, fecha): Call<ReservasResponse>
+    + getHorarios(restauranteId): Call<List<Map>>
+    + updateHorarios(restauranteId, horarios): Call<List<Map>>
+    + crearResena(restauranteId, body): Call<Map>
+    + subirImagen(restauranteId, MultipartBody.Part): Call<Map>
+    + getImagenes(restauranteId): Call<List<Map>>
+    + eliminarImagen(imagenId): Call<Map>
+  }
+
+  class RetrofitClient {
+    - static RetrofitClient instance
+    - Retrofit retrofit
+    - ApiService apiService
+    - static final boolean IS_DEBUG
+    - RetrofitClient(TokenManager)
+    + static getInstance(TokenManager): RetrofitClient
+    + static getInstance(SessionManager): RetrofitClient
+    + static resetInstance(): void
+    + getApiService(): ApiService
+  }
+
+  class AuthInterceptor {
+    - TokenManager tokenManager
+    + intercept(Chain): Response
+  }
+
+  class NetworkConfig {
+    + static String BASE_URL
+    + static String STORAGE_URL
+    + static String API_URL
+  }
+
+  class ErrorUtils {
+    + static getErrorMessage(Response): String
+    + static parseValidationError(Response): String
+    + static isSessionExpired(Response): boolean
+    + static handleSessionExpired(Context, Response): void
+  }
+}
+
+package "com.tablebit.mobile.data.local" as local {
+  class ConnectivityChecker {
+    - ConnectivityManager connectivityManager
+    - ConnectivityListener listener
+    + ConnectivityChecker(Context, ConnectivityListener)
+    + static isOnline(Context): boolean
+  }
+
+  interface ConnectivityListener {
+    + onOnline()
+    + onOffline()
+  }
+}
+
+package "com.tablebit.mobile.data.repository" as repo {
+  class AuthRepository {
+    - RetrofitClient client
+    - SessionManager sessionManager
+    + login(email, password): Call<LoginResponse>
+    + register(name, email, password): Call<LoginResponse>
+    + logout(): Call<Map>
+    + saveSession(LoginResponse): void
+    + clearSession(): void
+  }
+
+  class RestauranteRepository {
+    - RetrofitClient client
+    + getRestaurantes(): Call<List<Restaurante>>
+    + getRestaurante(id): Call<Map>
+  }
+
+  class MesaRepository {
+    - RetrofitClient client
+    + getMesasByRestaurante(restauranteId): Call<List<Mesa>>
+  }
+
+  class ReservaRepository {
+    - RetrofitClient client
+    + crearReserva(restauranteId, fecha, hora, cantidadPersonas): Call<Map>
+    + getMisReservas(): Call<List<Reserva>>
+    + cancelarReserva(reservaId): Call<Map>
+  }
+
+  class DashboardRepository {
+    - RetrofitClient client
+    + getMisRestaurantes(): Call<List<Restaurante>>
+    + getDashboard(restauranteId): Call<DashboardData>
+  }
+}
+
+package "com.tablebit.mobile.session" as session {
+  class TokenManager {
+    - static String PREF_NAME
+    - static String KEY_TOKEN
+    - static String KEY_USER_ID
+    - static String KEY_USER_NAME
+    - static String KEY_USER_EMAIL
+    - static String KEY_USER_ROLE
+    - SharedPreferences prefs
+    + saveToken(token): void
+    + getToken(): String
+    + saveUserInfo(userId, name, email, role): void
+    + getUserId(): int
+    + getUserName(): String
+    + getUserEmail(): String
+    + getUserRole(): String
+    + isAdmin(): boolean
+    + isLoggedIn(): boolean
+    + clearSession(): void
+  }
+
+  class SessionManager {
+    - TokenManager tokenManager
+    + getToken(): String
+    + saveToken(token): void
+    + isLoggedIn(): boolean
+    + getUserName(): String
+    + getUserEmail(): String
+    + getUserRole(): String
+    + isAdmin(): boolean
+    + getUserId(): int
+    + saveUserInfo(userId, name, email, role): void
+    + getTokenManager(): TokenManager
+    + performLogout(Context): void
+    + forceLogout(Context): void
+    + static redirectToLogin(Context): void
+  }
+}
+
+package "com.tablebit.mobile.ui.viewmodel" as viewmodel {
+  abstract class BaseViewModel {
+    # MutableLiveData<Boolean> loading
+    # MutableLiveData<String> errorMessage
+    # MutableLiveData<Boolean> networkError
+    # SessionManager sessionManager
+    + getLoading(): LiveData<Boolean>
+    + getErrorMessage(): LiveData<String>
+    + getNetworkError(): LiveData<Boolean>
+    # handleApiResponse(Response<T>): boolean
+    # handleFailure(Throwable): void
+    # handleFailure(Throwable, Call): void
+    + clearError(): void
+  }
+
+  class AuthViewModel {
+    - AuthRepository authRepository
+    - SessionManager sessionManager
+    - MutableLiveData<LoginResponse> loginResult
+    - MutableLiveData<Boolean> logoutDone
+    + login(email, password): void
+    + register(name, email, password): void
+    + logout(): void
+  }
+
+  class RestauranteViewModel {
+    - RestauranteRepository repository
+    - MutableLiveData<List<Restaurante>> restaurantes
+    + loadRestaurantes(): void
+  }
+
+  class MesaViewModel {
+    - MesaRepository repository
+    - MutableLiveData<List<Mesa>> mesas
+    + loadMesas(restauranteId): void
+  }
+
+  class ReservaViewModel {
+    - ReservaRepository repository
+    - MutableLiveData<List<Reserva>> reservas
+    - MutableLiveData<Boolean> reservaCreada
+    - MutableLiveData<Boolean> reservaCancelada
+    + loadReservas(): void
+    + crearReserva(restauranteId, fecha, hora, cantidadPersonas): void
+    + cancelarReserva(reservaId): void
+  }
+
+  class PerfilViewModel {
+    - SessionManager sessionManager
+    - MutableLiveData<Usuario> usuario
+    - MutableLiveData<Boolean> logoutDone
+    - MutableLiveData<Boolean> saveSuccess
+    - MutableLiveData<Boolean> avatarUploading
+    + getUserName(): String
+    + getUserEmail(): String
+    + loadPerfil(): void
+    + updatePerfil(name, telefono): void
+    + uploadAvatar(Uri): void
+    + logout(): void
+  }
+}
+
+package "com.tablebit.mobile.ui.admin" as admin {
+  class AdminDashboardViewModel {
+    - DashboardRepository repository
+    - MutableLiveData<List<Restaurante>> restaurantes
+    - MutableLiveData<DashboardData> dashboardData
+    - MutableLiveData<Restaurante> restauranteSeleccionado
+    - Call<DashboardData> pendingDashboardCall
+    - int retryCount
+    + loadRestaurantes(): void
+    + seleccionarRestaurante(Restaurante): void
+    + loadDashboard(restauranteId): void
+  }
+}
+
+package "com.tablebit.mobile.ui" as ui {
+  class BaseActivity {
+    # MaterialToolbar toolbar
+    + setupToolbar(title): void
+    + setupToolbarWithBack(title): void
+  }
+}
+
+' Relationships
+LoginResponse --> Usuario
+LoginResponse --> "token" String
+
+Reserva --> Restaurante
+Reserva --> Mesa
+Reserva --> Usuario
+
+DashboardData --> HoraPico
+DashboardData --> ReservaSemana
+CalendarioResponse --> Evento
+
+RetrofitClient --> AuthInterceptor
+RetrofitClient --> NetworkConfig
+
+AuthRepository --> RetrofitClient
+AuthRepository --> SessionManager
+RestauranteRepository --> RetrofitClient
+MesaRepository --> RetrofitClient
+ReservaRepository --> RetrofitClient
+DashboardRepository --> RetrofitClient
+
+BaseViewModel --> SessionManager
+AuthViewModel --> AuthRepository
+RestauranteViewModel --> RestauranteRepository
+MesaViewModel --> MesaRepository
+ReservaViewModel --> ReservaRepository
+PerfilViewModel --> SessionManager
+AdminDashboardViewModel --> DashboardRepository
+
+SessionManager --> TokenManager
+
+AuthInterceptor --> TokenManager
+
+AuthViewModel -up-|> AndroidViewModel
+RestauranteViewModel -up-|> AndroidViewModel
+MesaViewModel -up-|> AndroidViewModel
+ReservaViewModel -up-|> AndroidViewModel
+PerfilViewModel -up-|> AndroidViewModel
+AdminDashboardViewModel -up-|> BaseViewModel
+BaseViewModel -up-|> AndroidViewModel
+
+BaseActivity -up-|> AppCompatActivity
+
+@enduml

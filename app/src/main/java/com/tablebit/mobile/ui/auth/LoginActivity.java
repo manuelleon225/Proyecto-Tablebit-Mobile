@@ -2,12 +2,12 @@ package com.tablebit.mobile.ui.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.tablebit.mobile.MainActivity;
 import com.tablebit.mobile.R;
@@ -56,14 +56,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         authViewModel.getErrorMessage().observe(this, error -> {
-            if (error != null) Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+            if (error != null) showSnack(error);
         });
 
         authViewModel.getLoginResult().observe(this, result -> {
-            if (result != null) {
-                Toast.makeText(this, R.string.login_exitoso, Toast.LENGTH_SHORT).show();
-                goToHome();
-            }
+            if (result != null) goToHome();
         });
     }
 
@@ -72,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, R.string.campo_requerido, Toast.LENGTH_SHORT).show();
+            showSnack(getString(R.string.campo_requerido));
             return;
         }
 
@@ -84,5 +81,9 @@ public class LoginActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+
+    private void showSnack(String msg) {
+        Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT).show();
     }
 }

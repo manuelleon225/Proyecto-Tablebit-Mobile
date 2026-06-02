@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.tablebit.mobile.data.api.RetrofitClient;
-import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.ui.auth.LoginActivity;
+
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,37 +20,20 @@ public class SessionManager {
         this.tokenManager = new TokenManager(context);
     }
 
-    public String getToken() {
-        return tokenManager.getToken();
+    public String getToken() { return tokenManager.getToken(); }
+    public void saveToken(String token) { tokenManager.saveToken(token); }
+    public boolean isLoggedIn() { return tokenManager.isLoggedIn(); }
+    public String getUserName() { return tokenManager.getUserName(); }
+    public String getUserEmail() { return tokenManager.getUserEmail(); }
+    public String getUserRole() { return tokenManager.getUserRole(); }
+    public boolean isAdmin() { return tokenManager.isAdmin(); }
+    public int getUserId() { return tokenManager.getUserId(); }
+
+    public void saveUserInfo(int userId, String name, String email, String role) {
+        tokenManager.saveUserInfo(userId, name, email, role);
     }
 
-    public void saveToken(String token) {
-        tokenManager.saveToken(token);
-    }
-
-    public boolean isLoggedIn() {
-        return tokenManager.isLoggedIn();
-    }
-
-    public String getUserName() {
-        return tokenManager.getUserName();
-    }
-
-    public String getUserEmail() {
-        return tokenManager.getUserEmail();
-    }
-
-    public int getUserId() {
-        return tokenManager.getUserId();
-    }
-
-    public void saveUserInfo(int userId, String name, String email) {
-        tokenManager.saveUserInfo(userId, name, email);
-    }
-
-    public TokenManager getTokenManager() {
-        return tokenManager;
-    }
+    public TokenManager getTokenManager() { return tokenManager; }
 
     public void performLogout(Context context) {
         if (!isLoggedIn()) {
@@ -57,26 +41,24 @@ public class SessionManager {
             return;
         }
 
-        Call<ApiResponse<Void>> call = RetrofitClient.getInstance(tokenManager).getApiService().logout();
-        call.enqueue(new Callback<ApiResponse<Void>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
-                forceLogout(context);
-            }
+        RetrofitClient.getInstance(tokenManager).getApiService().logout()
+                .enqueue(new Callback<Map<String, Object>>() {
+                    @Override
+                    public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
+                        forceLogout(context);
+                    }
 
-            @Override
-            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
-                forceLogout(context);
-            }
-        });
+                    @Override
+                    public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                        forceLogout(context);
+                    }
+                });
     }
 
     public void forceLogout(Context context) {
         tokenManager.clearSession();
         RetrofitClient.resetInstance();
-        if (context != null) {
-            redirectToLogin(context);
-        }
+        if (context != null) redirectToLogin(context);
     }
 
     public static void redirectToLogin(Context context) {

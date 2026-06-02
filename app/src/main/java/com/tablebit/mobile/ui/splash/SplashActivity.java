@@ -11,6 +11,7 @@ import com.tablebit.mobile.MainActivity;
 import com.tablebit.mobile.R;
 import com.tablebit.mobile.session.SessionManager;
 import com.tablebit.mobile.ui.auth.LoginActivity;
+import com.tablebit.mobile.ui.onboarding.OnboardingActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         if (sessionManager.isLoggedIn()) {
             startActivity(new Intent(this, MainActivity.class));
         } else {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, OnboardingActivity.class));
         }
         finish();
     }

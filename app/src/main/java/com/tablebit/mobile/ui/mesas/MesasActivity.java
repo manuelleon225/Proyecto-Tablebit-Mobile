@@ -75,7 +75,7 @@ public class MesasActivity extends BaseActivity {
         intent.putExtra("restaurante_id", restauranteId);
         intent.putExtra("restaurante_nombre", restauranteNombre);
         intent.putExtra("mesa_id", mesa.getId());
-        intent.putExtra("mesa_numero", mesa.getNumeroMesa());
+        intent.putExtra("mesa_numero", mesa.getNumero());
         startActivity(intent);
     }
 }

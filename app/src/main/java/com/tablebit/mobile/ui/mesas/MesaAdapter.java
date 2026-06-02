@@ -39,9 +39,8 @@ public class MesaAdapter extends RecyclerView.Adapter<MesaAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Mesa mesa = mesas.get(position);
-        holder.tvMesaInfo.setText("Mesa #" + mesa.getNumeroMesa());
+        holder.tvMesaInfo.setText("Mesa #" + mesa.getNumero());
         holder.tvCapacidad.setText("Capacidad: " + mesa.getCapacidad() + " personas");
-        holder.tvUbicacion.setText("Ubicación: " + (mesa.getUbicacion() != null ? mesa.getUbicacion() : "No especificada"));
         holder.btnReservar.setOnClickListener(v -> listener.onReservarClick(mesa));
     }
 
@@ -51,14 +50,13 @@ public class MesaAdapter extends RecyclerView.Adapter<MesaAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvMesaInfo, tvCapacidad, tvUbicacion;
+        TextView tvMesaInfo, tvCapacidad;
         MaterialButton btnReservar;
 
         ViewHolder(View itemView) {
             super(itemView);
             tvMesaInfo = itemView.findViewById(R.id.tvMesaInfo);
             tvCapacidad = itemView.findViewById(R.id.tvCapacidad);
-            tvUbicacion = itemView.findViewById(R.id.tvUbicacion);
             btnReservar = itemView.findViewById(R.id.btnReservar);
         }
     }

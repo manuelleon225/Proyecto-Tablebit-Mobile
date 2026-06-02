@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing System -->
+    <dimen name="spacing_xxs">@dimen/_2sdp</dimen>
+    <dimen name="spacing_xs">@dimen/_4sdp</dimen>
+    <dimen name="spacing_sm">@dimen/_8sdp</dimen>
+    <dimen name="spacing_md">@dimen/_12sdp</dimen>
+    <dimen name="spacing_lg">@dimen/_16sdp</dimen>
+    <dimen name="spacing_xl">@dimen/_20sdp</dimen>
+    <dimen name="spacing_xxl">@dimen/_24sdp</dimen>
+    <dimen name="spacing_xxxl">@dimen/_32sdp</dimen>
+
+    <!-- Corner Radius -->
+    <dimen name="corner_small">@dimen/_4sdp</dimen>
+    <dimen name="corner_medium">@dimen/_8sdp</dimen>
+    <dimen name="corner_large">@dimen/_12sdp</dimen>
+    <dimen name="corner_xlarge">@dimen/_16sdp</dimen>
+    <dimen name="corner_xxlarge">@dimen/_20sdp</dimen>
+    <dimen name="corner_full">@dimen/_50sdp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="elevation_none">0dp</dimen>
+    <dimen name="elevation_low">@dimen/_1sdp</dimen>
+    <dimen name="elevation_medium">@dimen/_2sdp</dimen>
+    <dimen name="elevation_high">@dimen/_3sdp</dimen>
+    <dimen name="elevation_xhigh">@dimen/_4sdp</dimen>
+    <dimen name="elevation_xxhigh">@dimen/_6sdp</dimen>
+
+    <!-- Icon Sizes -->
+    <dimen name="icon_xs">@dimen/_12sdp</dimen>
+    <dimen name="icon_sm">@dimen/_16sdp</dimen>
+    <dimen name="icon_md">@dimen/_20sdp</dimen>
+    <dimen name="icon_lg">@dimen/_24sdp</dimen>
+    <dimen name="icon_xl">@dimen/_32sdp</dimen>
+    <dimen name="icon_avatar">@dimen/_40sdp</dimen>
+    <dimen name="icon_large_avatar">@dimen/_48sdp</dimen>
+
+    <!-- Component Heights -->
+    <dimen name="height_input">@dimen/_48sdp</dimen>
+    <dimen name="height_button">@dimen/_48sdp</dimen>
+    <dimen name="height_button_small">@dimen/_36sdp</dimen>
+    <dimen name="height_toolbar">@dimen/_56sdp</dimen>
+    <dimen name="height_search_bar">@dimen/_56sdp</dimen>
+    <dimen name="height_extended_fab">@dimen/_56sdp</dimen>
+
+    <!-- Image Heights -->
+    <dimen name="hero_image_height">@dimen/_180sdp</dimen>
+    <dimen name="banner_height">@dimen/_200sdp</dimen>
+    <dimen name="calendar_height">@dimen/_280sdp</dimen>
+</resources>

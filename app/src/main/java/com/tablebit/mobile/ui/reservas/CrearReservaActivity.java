@@ -19,7 +19,7 @@ public class CrearReservaActivity extends BaseActivity {
 
     private TextInputEditText etFecha, etHora, etPersonas;
     private MaterialButton btnConfirmar;
-    private int restauranteId, mesaId;
+    private int restauranteId;
     private ReservaViewModel viewModel;
 
     @Override
@@ -28,7 +28,6 @@ public class CrearReservaActivity extends BaseActivity {
         setContentView(R.layout.activity_crear_reserva);
 
         restauranteId = getIntent().getIntExtra("restaurante_id", -1);
-        mesaId = getIntent().getIntExtra("mesa_id", -1);
 
         viewModel = new ViewModelProvider(this).get(ReservaViewModel.class);
         initViews();
@@ -62,8 +61,8 @@ public class CrearReservaActivity extends BaseActivity {
             if (error != null) Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
         });
 
-        viewModel.getReservaCreada().observe(this, reserva -> {
-            if (reserva != null) {
+        viewModel.getReservaCreada().observe(this, creada -> {
+            if (Boolean.TRUE.equals(creada)) {
                 Toast.makeText(this, R.string.reserva_creada, Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -72,13 +71,19 @@ public class CrearReservaActivity extends BaseActivity {
 
     private void showDatePicker() {
         Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        long startOfTomorrow = cal.getTimeInMillis();
         DatePickerDialog picker = new DatePickerDialog(this,
                 (view, year, month, dayOfMonth) -> {
                     String fecha = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
                     etFecha.setText(fecha);
                 },
                 cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-        picker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        picker.getDatePicker().setMinDate(startOfTomorrow);
         picker.show();
     }
 
@@ -103,7 +108,7 @@ public class CrearReservaActivity extends BaseActivity {
             return;
         }
 
-        int personas = Integer.parseInt(personasStr);
-        viewModel.crearReserva(restauranteId, mesaId, fecha, hora, personas);
+        int cantidadPersonas = Integer.parseInt(personasStr);
+        viewModel.crearReserva(restauranteId, fecha, hora, cantidadPersonas);
     }
 }

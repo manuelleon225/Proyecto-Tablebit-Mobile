@@ -1,18 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Brand Primary: Premium Green -->
     <color name="primary">#FF1B5E20</color>
     <color name="primary_dark">#FF0A2E0D</color>
     <color name="primary_light">#FF4C8C4A</color>
-    <color name="secondary">#FFF57C00</color>
-    <color name="background">#FFF5F5F5</color>
-    <color name="surface">#FFFFFFFF</color>
-    <color name="error">#FFD32F2F</color>
+    <color name="primary_container">#FFE8F5E9</color>
     <color name="on_primary">#FFFFFFFF</color>
-    <color name="on_surface">#FF212121</color>
-    <color name="text_secondary">#FF757575</color>
-    <color name="estado_pendiente">#FFF57C00</color>
-    <color name="estado_confirmada">#FF388E3C</color>
-    <color name="estado_cancelada">#FFD32F2F</color>
+    <color name="on_primary_container">#FF0A2E0D</color>
+
+    <!-- Brand Secondary: Premium Gold -->
+    <color name="secondary">#FFD4AF37</color>
+    <color name="secondary_dark">#FFB8960F</color>
+    <color name="secondary_light">#FFE8D48B</color>
+    <color name="secondary_container">#FFFDF4D6</color>
+    <color name="on_secondary">#FF1F2937</color>
+
+    <!-- Tertiary: Warm Bronze -->
+    <color name="tertiary">#FF8D6E4E</color>
+    <color name="tertiary_container">#FFF5E6D3</color>
+
+    <!-- Surfaces -->
+    <color name="background">#FFFDF8F0</color>
+    <color name="surface">#FFFFFFFF</color>
+    <color name="surface_variant">#FFF5F0EB</color>
+    <color name="surface_dim">#FFE8E0D8</color>
+
+    <!-- Text -->
+    <color name="text_primary">#FF1F2937</color>
+    <color name="text_secondary">#FF6B7280</color>
+    <color name="text_disabled">#FF9CA3AF</color>
+    <color name="text_inverse">#FFFFFFFF</color>
+
+    <!-- Feedback -->
+    <color name="success">#FF2E7D32</color>
+    <color name="success_container">#FFE8F5E9</color>
+    <color name="warning">#FFF57C00</color>
+    <color name="warning_container">#FFFFF3E0</color>
+    <color name="error">#FFD32F2F</color>
+    <color name="error_container">#FFFFEBEE</color>
+
+    <!-- Outline -->
+    <color name="outline">#FFD1D5DB</color>
+    <color name="outline_variant">#FFE5E7EB</color>
+
+    <!-- Backward Compatibility (old colors mapped to new) -->
+    <color name="on_surface">@color/text_primary</color>
+    <color name="estado_pendiente">@color/warning</color>
+    <color name="estado_confirmada">@color/success</color>
+    <color name="estado_cancelada">@color/error</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <!-- Notification dot colors -->
+    <color name="dot_disponible">@color/success</color>
+    <color name="dot_ocupada">@color/error</color>
+    <color name="dot_mantenimiento">@color/warning</color>
 </resources>

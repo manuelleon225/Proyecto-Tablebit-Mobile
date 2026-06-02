@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TableBit.Button.Primary" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/on_primary</item>
+        <item name="android:height">@dimen/height_button</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cornerRadius">@dimen/corner_medium</item>
+    </style>
+
+    <style name="TableBit.Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/secondary</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:height">@dimen/height_button</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cornerRadius">@dimen/corner_medium</item>
+    </style>
+
+    <style name="TableBit.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TableBit.Chip.Filter" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/surface_variant</item>
+        <item name="chipStrokeColor">@color/outline</item>
+        <item name="chipStrokeWidth">1dp</item>
+    </style>
+
+    <style name="TableBit.TextInput" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="boxBackgroundColor">@color/surface_variant</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="hintTextColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TableBit.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/primary</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="navigationIconTint">@color/white</item>
+    </style>
+</resources>

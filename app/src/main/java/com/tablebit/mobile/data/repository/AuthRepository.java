@@ -1,11 +1,12 @@
 package com.tablebit.mobile.data.repository;
 
 import com.tablebit.mobile.data.api.RetrofitClient;
-import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.LoginRequest;
 import com.tablebit.mobile.data.model.LoginResponse;
 import com.tablebit.mobile.data.model.RegisterRequest;
 import com.tablebit.mobile.session.SessionManager;
+
+import java.util.Map;
 
 import retrofit2.Call;
 
@@ -27,7 +28,7 @@ public class AuthRepository {
         return client.getApiService().register(new RegisterRequest(name, email, password));
     }
 
-    public Call<ApiResponse<Void>> logout() {
+    public Call<Map<String, Object>> logout() {
         return client.getApiService().logout();
     }
 
@@ -37,7 +38,8 @@ public class AuthRepository {
             sessionManager.saveUserInfo(
                     response.getUser().getId(),
                     response.getUser().getName(),
-                    response.getUser().getEmail()
+                    response.getUser().getEmail(),
+                    response.getUser().getRole()
             );
         }
     }

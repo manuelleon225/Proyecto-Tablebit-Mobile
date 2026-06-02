@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/TableBit.Toolbar"
+        app:title="Detalle de reserva"
+        app:navigationIcon="@android:drawable/ic_menu_revert" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="@dimen/spacing_lg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/corner_xlarge"
+                app:cardElevation="@dimen/elevation_medium">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg">
+
+                    <TextView android:id="@+id/tvCliente" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="@style/TableBitText.HeadlineSmall" />
+                    <TextView android:id="@+id/tvEmail" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_xs" android:textAppearance="@style/TableBitText.BodyMedium" android:textColor="@color/text_secondary" />
+                    <TextView android:id="@+id/tvTelefono" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="@style/TableBitText.BodyMedium" android:textColor="@color/text_secondary" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/outline" android:layout_marginVertical="@dimen/spacing_md" />
+                    <TextView android:id="@+id/tvRestaurante" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="@style/TableBitText.TitleMedium" />
+                    <TextView android:id="@+id/tvMesa" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_xxs" android:textAppearance="@style/TableBitText.BodyMedium" />
+                    <TextView android:id="@+id/tvFechaHora" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_xxs" android:textAppearance="@style/TableBitText.BodyMedium" />
+                    <TextView android:id="@+id/tvPersonas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_xxs" android:textAppearance="@style/TableBitText.BodyMedium" />
+                    <TextView android:id="@+id/tvEstado" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_sm" android:textAppearance="@style/TableBitText.TitleSmall" />
+                    <TextView android:id="@+id/tvNotas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_sm" android:textAppearance="@style/TableBitText.BodyMedium" android:textColor="@color/text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:text="Acciones"
+                android:textAppearance="@style/TableBitText.TitleMedium" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConfirmar"
+                style="@style/TableBit.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:text="Confirmar reserva" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCheckIn"
+                style="@style/TableBit.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:text="Check-in (Completar)" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancelar"
+                style="@style/TableBit.Button.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:text="Cancelar reserva"
+                android:textColor="@color/error" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

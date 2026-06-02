@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="@dimen/spacing_md"
     app:cardCornerRadius="12dp"
     app:cardElevation="3dp">
 
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="@dimen/spacing_lg">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -24,7 +24,7 @@
                 android:id="@+id/tvMesaInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/on_surface"
+                android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -32,14 +32,7 @@
                 android:id="@+id/tvCapacidad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/text_secondary"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvUbicacion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
 
@@ -55,3 +48,4 @@
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
+

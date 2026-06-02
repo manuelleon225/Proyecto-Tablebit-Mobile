@@ -7,18 +7,18 @@ public class ReservaRequest {
     @SerializedName("restaurante_id")
     private int restauranteId;
 
-    @SerializedName("mesa_id")
-    private int mesaId;
-
     private String fecha;
     private String hora;
-    private int personas;
 
-    public ReservaRequest(int restauranteId, int mesaId, String fecha, String hora, int personas) {
+    @SerializedName("cantidad_personas")
+    private int cantidadPersonas;
+
+    private String notas;
+
+    public ReservaRequest(int restauranteId, String fecha, String hora, int cantidadPersonas) {
         this.restauranteId = restauranteId;
-        this.mesaId = mesaId;
         this.fecha = fecha;
         this.hora = hora;
-        this.personas = personas;
+        this.cantidadPersonas = cantidadPersonas;
     }
 }

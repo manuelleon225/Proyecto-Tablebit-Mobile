@@ -1,0 +1,147 @@
+@startuml
+!theme plain
+skinparam defaultFontName Arial
+skinparam componentStyle rectangle
+
+title "Diagrama de Componentes - TableBit Mobile"
+
+package "Capa de Presentación (UI)" as presentation #LightSalmon {
+  [SplashActivity] as splash
+  [OnboardingActivity] as onboarding
+  [LoginActivity] as login
+  [RegisterActivity] as register
+  [MainActivity] as main
+
+  [HomeClienteActivity] as homeCliente
+  [AdminDashboardActivity] as adminDashboard
+
+  [RestauranteListActivity] as restList
+  [RestauranteDetalleActivity] as restDetail
+  [MesasActivity] as mesasView
+  [ReservasActivity] as reservasView
+  [CrearReservaActivity] as crearReserva
+  [PerfilActivity] as perfil
+
+  [FavoritosActivity] as favoritos
+  [MisReservasActivity] as misReservas
+  [ProcesoReservaActivity] as procesoReserva
+  [DetalleRestauranteClienteActivity] as detalleCliente
+
+  [GestionMesasActivity] as gestionMesas
+  [ListadoReservasActivity] as listadoReservas
+  [CalendarioReservasActivity] as calendario
+  [HorariosRestauranteActivity] as horarios
+  [DetalleReservaAdminActivity] as detalleAdmin
+  [GaleriaAdminActivity] as galeriaAdmin
+  [CrearResenaActivity] as crearResena
+  [GaleriaFullscreenActivity] as galeriaFull
+
+  [BaseActivity] as baseActivity
+  [BaseViewModel] as baseVM
+}
+
+package "Capa de Lógica de Negocio (ViewModel)" as viewmodel #LightYellow {
+  [AuthViewModel] as authVM
+  [RestauranteViewModel] as restVM
+  [MesaViewModel] as mesaVM
+  [ReservaViewModel] as reservaVM
+  [PerfilViewModel] as perfilVM
+  [AdminDashboardViewModel] as adminVM
+}
+
+package "Capa de Datos (Data)" as data #LightBlue {
+  [AuthRepository] as authRepo
+  [RestauranteRepository] as restRepo
+  [MesaRepository] as mesaRepo
+  [ReservaRepository] as reservaRepo
+  [DashboardRepository] as dashRepo
+
+  [RetrofitClient] as retrofitClient
+  [ApiService] as apiService
+  [AuthInterceptor] as authInterceptor
+  [NetworkConfig] as netConfig
+  [ErrorUtils] as errorUtils
+
+  [TokenManager] as tokenMgr
+  [SessionManager] as sessionMgr
+
+  [ConnectivityChecker] as connectivity
+}
+
+package "Externo" as externo #LightGray {
+  [Servidor API REST (Laravel)] as backend
+  [Base de Datos MySQL] as db
+}
+
+' Presentación -> ViewModel
+splash --> main : "navega a"
+main --> login : "no sesión"
+main --> homeCliente : "rol cliente"
+main --> adminDashboard : "rol admin"
+onboarding --> login
+login --> main
+register --> login
+
+homeCliente --> detalleCliente
+homeCliente --> misReservas
+homeCliente --> favoritos
+homeCliente --> perfil
+
+detalleCliente --> crearReserva
+detalleCliente --> crearResena
+detalleCliente --> galeriaFull
+
+adminDashboard --> gestionMesas
+adminDashboard --> listadoReservas
+adminDashboard --> calendario
+adminDashboard --> horarios
+adminDashboard --> galeriaAdmin
+adminDashboard --> detalleAdmin
+
+' Activities observan ViewModels
+login ..> authVM : <<observa>>
+register ..> authVM : <<observa>>
+homeCliente ..> restVM : <<observa>>
+detalleCliente ..> restVM : <<observa>>
+restList ..> restVM : <<observa>>
+mesasView ..> mesaVM : <<observa>>
+gestionMesas ..> mesaVM : <<observa>>
+reservasView ..> reservaVM : <<observa>>
+crearReserva ..> reservaVM : <<observa>>
+misReservas ..> reservaVM : <<observa>>
+perfil ..> perfilVM : <<observa>>
+adminDashboard ..> adminVM : <<observa>>
+
+' ViewModel -> Repository
+authVM --> authRepo : <<usa>>
+restVM --> restRepo : <<usa>>
+mesaVM --> mesaRepo : <<usa>>
+reservaVM --> reservaRepo : <<usa>>
+perfilVM ..> RetrofitClient : <<usa directo>>
+adminVM --> dashRepo : <<usa>>
+
+' Repository -> API
+authRepo --> RetrofitClient : <<usa>>
+restRepo --> RetrofitClient : <<usa>>
+mesaRepo --> RetrofitClient : <<usa>>
+reservaRepo --> RetrofitClient : <<usa>>
+dashRepo --> RetrofitClient : <<usa>>
+
+' Session
+authRepo --> SessionManager : <<usa>>
+perfilVM --> SessionManager : <<usa>>
+baseVM --> SessionManager : <<usa>>
+sessionMgr --> tokenMgr : <<delega>>
+sessionMgr --> RetrofitClient : <<usa>>
+
+' Retrofit internals
+retrofitClient --> apiService : <<crea>>
+retrofitClient --> authInterceptor : <<inyecta>>
+retrofitClient --> netConfig : <<usa>>
+apiService --> backend : <<HTTP>>
+authInterceptor --> tokenMgr : <<lee token>>
+
+' Backend
+backend --> db : <<persiste>>
+
+@enduml

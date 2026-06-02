@@ -36,6 +36,8 @@
     <string name="bienvenido">Bienvenido</string>
     <string name="menu_restaurantes">Restaurantes</string>
     <string name="menu_restaurantes_desc">Explora restaurantes disponibles</string>
+    <string name="menu_mis_restaurantes">Mis Restaurantes</string>
+    <string name="menu_mis_restaurantes_desc">Administra tus restaurantes</string>
     <string name="menu_reservas">Mis Reservas</string>
     <string name="menu_reservas_desc">Gestiona tus reservas</string>
     <string name="menu_perfil">Mi Perfil</string>

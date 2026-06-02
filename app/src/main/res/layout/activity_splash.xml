@@ -2,30 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/primary">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="36sp"
-        android:textStyle="bold" />
+        android:textAppearance="@style/TableBitText.HeadlineLarge"
+        android:textColor="@color/white" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Reserva de mesas para restaurantes"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:text="Reserva experiencias, no solo mesas"
+        android:textAppearance="@style/TableBitText.BodyMedium"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:alpha="0.8" />
 
     <ProgressBar
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="48dp"
+        android:layout_width="@dimen/icon_large_avatar"
+        android:layout_height="@dimen/icon_large_avatar"
+        android:layout_marginTop="@dimen/spacing_xxxl"
         android:indeterminateTint="@color/white" />
-
 </LinearLayout>

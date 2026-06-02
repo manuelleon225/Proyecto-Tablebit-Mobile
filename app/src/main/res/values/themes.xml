@@ -1,14 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Base.Theme.TableBitMobile" parent="Theme.Material3.DayNight.NoActionBar">
+
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/secondary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorPrimaryContainer">@color/primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_container</item>
+
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorSecondaryContainer">@color/secondary_container</item>
+
+        <item name="colorTertiary">@color/tertiary</item>
+        <item name="colorTertiaryContainer">@color/tertiary_container</item>
+
         <item name="android:colorBackground">@color/background</item>
         <item name="colorSurface">@color/surface</item>
-        <item name="colorOnPrimary">@color/on_primary</item>
-        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorSurfaceDim">@color/surface_dim</item>
+
         <item name="colorError">@color/error</item>
+        <item name="colorErrorContainer">@color/error_container</item>
+        <item name="colorOnError">@color/white</item>
+
+        <item name="colorOutline">@color/outline</item>
+        <item name="colorOutlineVariant">@color/outline_variant</item>
+
+        <!-- Shape -->
+        <item name="shapeCornerFamily">rounded</item>
+
+        <!-- Typography -->
+        <item name="textAppearanceHeadlineLarge">@style/TableBitText.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TableBitText.HeadlineMedium</item>
+        <item name="textAppearanceHeadlineSmall">@style/TableBitText.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TableBitText.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TableBitText.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TableBitText.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TableBitText.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TableBitText.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TableBitText.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TableBitText.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TableBitText.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TableBitText.LabelSmall</item>
+
+        <item name="actionBarTheme">@style/ThemeOverlay.TableBit.Toolbar</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:navigationBarColor">@color/primary_dark</item>
     </style>
 
     <style name="Theme.TableBitMobile" parent="Base.Theme.TableBitMobile" />
+
+    <style name="ThemeOverlay.TableBit.Toolbar" parent="ThemeOverlay.Material3.ActionBar">
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="titleTextColor">@color/white</item>
+    </style>
+
+    <style name="TableBitText" />
+
+    <!-- Headings: Playfair Display via system serif -->
+    <style name="TableBitText.HeadlineLarge">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:fontWeight">700</item>
+    </style>
+    <style name="TableBitText.DisplayMedium">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textSize">48sp</item>
+        <item name="android:fontWeight">700</item>
+    </style>
+    <style name="TableBitText.HeadlineMedium">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:fontWeight">700</item>
+    </style>
+    <style name="TableBitText.HeadlineSmall">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontWeight">600</item>
+    </style>
+    <style name="TableBitText.TitleLarge">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontWeight">600</item>
+    </style>
+    <style name="TableBitText.TitleMedium">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontWeight">600</item>
+    </style>
+    <style name="TableBitText.TitleSmall">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontWeight">600</item>
+    </style>
+    <!-- Body: DM Sans via system sans-serif -->
+    <style name="TableBitText.BodyLarge">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="TableBitText.BodyMedium">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="TableBitText.BodySmall">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="TableBitText.LabelLarge">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontWeight">500</item>
+    </style>
+    <style name="TableBitText.LabelMedium">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontWeight">500</item>
+    </style>
+    <style name="TableBitText.LabelSmall">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontWeight">500</item>
+    </style>
 </resources>

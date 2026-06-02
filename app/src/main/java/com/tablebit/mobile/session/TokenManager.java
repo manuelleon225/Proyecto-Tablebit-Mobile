@@ -9,6 +9,7 @@ public class TokenManager {
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USER_NAME = "user_name";
     private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_USER_ROLE = "user_role";
 
     private final SharedPreferences prefs;
 
@@ -24,11 +25,12 @@ public class TokenManager {
         return prefs.getString(KEY_TOKEN, null);
     }
 
-    public void saveUserInfo(int userId, String name, String email) {
+    public void saveUserInfo(int userId, String name, String email, String role) {
         prefs.edit()
                 .putInt(KEY_USER_ID, userId)
                 .putString(KEY_USER_NAME, name)
                 .putString(KEY_USER_EMAIL, email)
+                .putString(KEY_USER_ROLE, role)
                 .apply();
     }
 
@@ -42,6 +44,15 @@ public class TokenManager {
 
     public String getUserEmail() {
         return prefs.getString(KEY_USER_EMAIL, null);
+    }
+
+    public String getUserRole() {
+        return prefs.getString(KEY_USER_ROLE, "cliente");
+    }
+
+    public boolean isAdmin() {
+        String role = getUserRole();
+        return role != null && (role.equals("admin_restaurante") || role.equals("admin") || role.equals("superadmin"));
     }
 
     public boolean isLoggedIn() {

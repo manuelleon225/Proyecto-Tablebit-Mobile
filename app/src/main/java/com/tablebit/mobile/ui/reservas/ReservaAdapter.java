@@ -45,7 +45,10 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ViewHold
 
         holder.tvRestaurante.setText(nombreRestaurante);
         holder.tvFechaHora.setText(reserva.getFecha() + " - " + reserva.getHora());
-        holder.tvMesaPersonas.setText("Mesa #" + reserva.getMesaId() + " | " + reserva.getPersonas() + " personas");
+
+        String mesaInfo = reserva.getMesa() != null
+                ? "Mesa #" + reserva.getMesa().getNumero() : "Mesa #" + reserva.getMesaId();
+        holder.tvMesaPersonas.setText(mesaInfo + " | " + reserva.getCantidadPersonas() + " personas");
 
         String estado = reserva.getEstado();
         int color;

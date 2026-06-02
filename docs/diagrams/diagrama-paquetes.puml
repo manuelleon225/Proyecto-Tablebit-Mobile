@@ -1,0 +1,164 @@
+@startuml
+!theme plain
+skinparam packageStyle rectangle
+skinparam defaultFontName Arial
+left to right direction
+
+package "com.tablebit.mobile" as root {
+  package "data" as data #LightBlue {
+    package "api" as api #LightCyan {
+      [ApiService.java] as apiService
+      [RetrofitClient.java] as retrofitClient
+      [AuthInterceptor.java] as authInterceptor
+      [NetworkConfig.java] as networkConfig
+      [ErrorUtils.java] as errorUtils
+    }
+
+    package "local" as local #LightCyan {
+      [ConnectivityChecker.java] as connectivityChecker
+    }
+
+    package "model" as model #LightCyan {
+      [ApiResponse.java]
+      [CalendarioResponse.java]
+      [DashboardData.java]
+      [LoginRequest.java]
+      [LoginResponse.java]
+      [Mesa.java]
+      [MesaEstadoRequest.java]
+      [RegisterRequest.java]
+      [Reserva.java]
+      [ReservaRequest.java]
+      [ReservasResponse.java]
+      [Restaurante.java]
+      [Usuario.java]
+    }
+
+    package "repository" as repository #LightCyan {
+      [AuthRepository.java]
+      [DashboardRepository.java]
+      [MesaRepository.java]
+      [ReservaRepository.java]
+      [RestauranteRepository.java]
+    }
+  }
+
+  package "session" as session #LightGreen {
+    [SessionManager.java] as sessionManager
+    [TokenManager.java] as tokenManager
+  }
+
+  package "ui" as ui #LightSalmon {
+    package "admin" as admin #MistyRose {
+      [AdminDashboardActivity.java]
+      [AdminDashboardViewModel.java]
+      [AdminRestauranteAdapter.java]
+      [CalendarioReservasActivity.java]
+      [DetalleReservaAdminActivity.java]
+      [GaleriaAdminActivity.java]
+      [GestionMesasActivity.java]
+      [HorariosRestauranteActivity.java]
+      [ListadoReservasActivity.java]
+      [MesaAdminAdapter.java]
+      [MesaEstadoBottomSheet.java]
+      [ReservaAdminAdapter.java]
+      [SelectorSheet.java]
+      adapters/ [QuickActionsAdapter.java]
+    }
+
+    package "auth" as auth #MistyRose {
+      [LoginActivity.java]
+      [RegisterActivity.java]
+    }
+
+    package "cliente" as cliente #MistyRose {
+      [CategoriaAdapter.java]
+      [CrearResenaActivity.java]
+      [DetalleRestauranteClienteActivity.java]
+      [FavoritosActivity.java]
+      [GaleriaAdapter.java]
+      [GaleriaFullscreenActivity.java]
+      [GaleriaFullscreenAdapter.java]
+      [HomeClienteActivity.java]
+      [HomeClienteAdapter.java]
+      [MisReservasActivity.java]
+      [MisReservasPagerAdapter.java]
+      [ProcesoReservaActivity.java]
+      [ReservaClienteAdapter.java]
+      [ReservasPasadasFragment.java]
+      [ReservasProximasFragment.java]
+      [RestauranteDestacadoAdapter.java]
+      [RestauranteRecomendadoAdapter.java]
+      [ReviewAdapter.java]
+    }
+
+    package "mesas" as mesas #MistyRose {
+      [MesaAdapter.java]
+      [MesasActivity.java]
+    }
+
+    package "onboarding" as onboarding #MistyRose {
+      [OnboardingActivity.java]
+      [OnboardingAdapter.java]
+    }
+
+    package "perfil" as perfil #MistyRose {
+      [PerfilActivity.java]
+    }
+
+    package "reservas" as reservas #MistyRose {
+      [CrearReservaActivity.java]
+      [ReservaAdapter.java]
+      [ReservasActivity.java]
+    }
+
+    package "restaurantes" as restaurantes #MistyRose {
+      [MisRestaurantesActivity.java]
+      [RestauranteAdapter.java]
+      [RestauranteDetalleActivity.java]
+      [RestauranteListActivity.java]
+    }
+
+    package "splash" as splash #MistyRose {
+      [SplashActivity.java]
+    }
+
+    package "viewmodel" as viewmodel #MistyRose {
+      [AuthViewModel.java]
+      [BaseViewModel.java]
+      [MesaViewModel.java]
+      [PerfilViewModel.java]
+      [ReservaViewModel.java]
+      [RestauranteViewModel.java]
+    }
+
+    [BaseActivity.java]
+  }
+
+  [MainActivity.java]
+}
+
+' Dependencies between packages
+api --> model : <<use>>
+repository --> api : <<use>>
+repository --> model : <<use>>
+viewmodel --> repository : <<use>>
+viewmodel --> session : <<use>>
+viewmodel --> model : <<use>>
+
+admin --> viewmodel : <<use>>
+admin --> repository : <<use>>
+auth --> viewmodel : <<use>>
+cliente --> viewmodel : <<use>>
+cliente --> repository : <<use>>
+perfil --> viewmodel : <<use>>
+reservas --> viewmodel : <<use>>
+restaurantes --> viewmodel : <<use>>
+mesas --> viewmodel : <<use>>
+
+session --> api : <<use>>
+api --> session : <<use>>
+
+MainActivity --> session : <<use>>
+
+@enduml

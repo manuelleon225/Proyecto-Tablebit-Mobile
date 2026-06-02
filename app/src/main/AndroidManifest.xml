@@ -34,10 +34,26 @@
         <activity android:name=".ui.auth.RegisterActivity" />
         <activity android:name=".ui.restaurantes.RestauranteListActivity" />
         <activity android:name=".ui.restaurantes.RestauranteDetalleActivity" />
+        <activity android:name=".ui.restaurantes.MisRestaurantesActivity" />
+        <activity android:name=".ui.cliente.HomeClienteActivity" />
+        <activity android:name=".ui.cliente.DetalleRestauranteClienteActivity" />
+        <activity android:name=".ui.cliente.FavoritosActivity" />
+        <activity android:name=".ui.onboarding.OnboardingActivity" />
+        <activity android:name=".ui.cliente.ProcesoReservaActivity" />
+        <activity android:name=".ui.cliente.MisReservasActivity" />
+        <activity android:name=".ui.admin.AdminDashboardActivity" />
+        <activity android:name=".ui.admin.GestionMesasActivity" />
+        <activity android:name=".ui.admin.ListadoReservasActivity" />
+        <activity android:name=".ui.admin.CalendarioReservasActivity" />
         <activity android:name=".ui.mesas.MesasActivity" />
         <activity android:name=".ui.reservas.ReservasActivity" />
         <activity android:name=".ui.reservas.CrearReservaActivity" />
         <activity android:name=".ui.perfil.PerfilActivity" />
+        <activity android:name=".ui.cliente.CrearResenaActivity" />
+        <activity android:name=".ui.cliente.GaleriaFullscreenActivity" />
+        <activity android:name=".ui.admin.HorariosRestauranteActivity" />
+        <activity android:name=".ui.admin.DetalleReservaAdminActivity" />
+        <activity android:name=".ui.admin.GaleriaAdminActivity" />
 
     </application>
 

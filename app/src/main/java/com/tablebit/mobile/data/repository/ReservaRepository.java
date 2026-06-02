@@ -1,12 +1,12 @@
 package com.tablebit.mobile.data.repository;
 
 import com.tablebit.mobile.data.api.RetrofitClient;
-import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.Reserva;
 import com.tablebit.mobile.data.model.ReservaRequest;
 import com.tablebit.mobile.session.TokenManager;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 
@@ -18,16 +18,16 @@ public class ReservaRepository {
         this.client = RetrofitClient.getInstance(tokenManager);
     }
 
-    public Call<ApiResponse<Reserva>> crearReserva(int restauranteId, int mesaId, String fecha, String hora, int personas) {
-        ReservaRequest request = new ReservaRequest(restauranteId, mesaId, fecha, hora, personas);
+    public Call<Map<String, Object>> crearReserva(int restauranteId, String fecha, String hora, int cantidadPersonas) {
+        ReservaRequest request = new ReservaRequest(restauranteId, fecha, hora, cantidadPersonas);
         return client.getApiService().crearReserva(request);
     }
 
-    public Call<ApiResponse<List<Reserva>>> getMisReservas() {
+    public Call<List<Reserva>> getMisReservas() {
         return client.getApiService().getMisReservas();
     }
 
-    public Call<ApiResponse<Reserva>> cancelarReserva(int reservaId) {
+    public Call<Map<String, Object>> cancelarReserva(int reservaId) {
         return client.getApiService().cancelarReserva(reservaId);
     }
 }

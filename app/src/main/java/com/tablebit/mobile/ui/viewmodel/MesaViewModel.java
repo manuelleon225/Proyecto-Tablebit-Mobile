@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.tablebit.mobile.data.model.ApiResponse;
 import com.tablebit.mobile.data.model.Mesa;
 import com.tablebit.mobile.data.repository.MesaRepository;
 import com.tablebit.mobile.session.SessionManager;
@@ -41,19 +40,19 @@ public class MesaViewModel extends AndroidViewModel {
         loading.setValue(true);
         errorMessage.setValue(null);
 
-        repository.getMesasByRestaurante(restauranteId).enqueue(new Callback<ApiResponse<List<Mesa>>>() {
+        repository.getMesasByRestaurante(restauranteId).enqueue(new Callback<List<Mesa>>() {
             @Override
-            public void onResponse(Call<ApiResponse<List<Mesa>>> call, Response<ApiResponse<List<Mesa>>> response) {
+            public void onResponse(Call<List<Mesa>> call, Response<List<Mesa>> response) {
                 loading.setValue(false);
-                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                    mesas.setValue(response.body().getData());
+                if (response.isSuccessful() && response.body() != null) {
+                    mesas.setValue(response.body());
                 } else {
                     mesas.setValue(new ArrayList<>());
                 }
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<List<Mesa>>> call, Throwable t) {
+            public void onFailure(Call<List<Mesa>> call, Throwable t) {
                 loading.setValue(false);
                 errorMessage.setValue("Error de conexi\u00f3n");
             }
