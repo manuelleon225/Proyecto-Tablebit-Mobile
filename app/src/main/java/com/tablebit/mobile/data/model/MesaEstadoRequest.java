@@ -6,4 +6,6 @@ public class MesaEstadoRequest {
     public MesaEstadoRequest(String estado) {
         this.estado = estado;
     }
+
+    public String getEstado() { return estado; }
 }

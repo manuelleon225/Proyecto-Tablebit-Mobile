@@ -1,5 +1,7 @@
 package com.tablebit.mobile.data.api;
 
+import com.tablebit.mobile.data.mock.MockApiService;
+import com.tablebit.mobile.data.mock.MockData;
 import com.tablebit.mobile.session.SessionManager;
 import com.tablebit.mobile.session.TokenManager;
 
@@ -16,7 +18,9 @@ public class RetrofitClient {
     private final Retrofit retrofit;
     private final ApiService apiService;
 
-    private static final boolean IS_DEBUG = false; // Cambiar a true solo en desarrollo local
+    private static final boolean IS_DEBUG = false;
+    private static boolean useMockMode = false;
+    private static MockApiService mockApiService;
 
     private RetrofitClient(TokenManager tokenManager) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -44,6 +48,17 @@ public class RetrofitClient {
         apiService = retrofit.create(ApiService.class);
     }
 
+    public static void setMockMode(boolean mock) {
+        useMockMode = mock;
+        if (mock && mockApiService == null) {
+            mockApiService = new MockApiService();
+        }
+    }
+
+    public static boolean isMockMode() {
+        return useMockMode;
+    }
+
     public static synchronized RetrofitClient getInstance(TokenManager tokenManager) {
         if (instance == null) {
             instance = new RetrofitClient(tokenManager);
@@ -60,6 +75,9 @@ public class RetrofitClient {
     }
 
     public ApiService getApiService() {
+        if (useMockMode && mockApiService != null) {
+            return mockApiService;
+        }
         return apiService;
     }
 }

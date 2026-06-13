@@ -21,4 +21,9 @@ public class ReservaRequest {
         this.hora = hora;
         this.cantidadPersonas = cantidadPersonas;
     }
+
+    public int getRestauranteId() { return restauranteId; }
+    public String getFecha() { return fecha; }
+    public String getHora() { return hora; }
+    public int getCantidadPersonas() { return cantidadPersonas; }
 }

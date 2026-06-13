@@ -9,5 +9,7 @@ public class ReservasResponse {
     private int total;
 
     public List<Reserva> getData() { return data; }
+    public void setData(List<Reserva> data) { this.data = data; }
     public int getTotal() { return total; }
+    public void setTotal(int total) { this.total = total; }
 }

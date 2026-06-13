@@ -12,4 +12,7 @@ public class RegisterRequest {
         this.password = password;
         this.password_confirmation = password;
     }
+
+    public String getName() { return name; }
+    public String getEmail() { return email; }
 }
